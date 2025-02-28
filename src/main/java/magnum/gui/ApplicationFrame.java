@@ -24,6 +24,7 @@ public class ApplicationFrame extends JFrame {
         add(bodyPanel, BorderLayout.CENTER);
         add(footerPanel, BorderLayout.SOUTH);
 
+        setFocusable(true);
         setVisible(true);
     }
 

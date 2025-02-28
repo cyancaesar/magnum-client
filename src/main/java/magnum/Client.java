@@ -62,11 +62,11 @@ public class Client extends WebSocketClient {
     @Override
     public void onClose(int i, String s, boolean b) {
         System.out.printf("Client %d: Connection closed\n", id);
-        reconnect();
     }
 
     @Override
     public void onError(Exception e) {
+        System.out.println(e);
         System.out.printf("Client %d: Socket error\n", id);
     }
 }

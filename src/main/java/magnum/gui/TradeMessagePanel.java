@@ -5,6 +5,7 @@ import magnum.MessageListener;
 import magnum.PricingDataOuterClass;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.Instant;
@@ -33,6 +34,15 @@ public class TradeMessagePanel extends JPanel implements MessageListener {
         table.setFillsViewportHeight(true);
         scrollPane.setAutoscrolls(true);
 
+        DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+        dtcr.setHorizontalAlignment(SwingConstants.CENTER);
+
+        table.getColumnModel().getColumn(0).setCellRenderer(dtcr);
+        table.getColumnModel().getColumn(1).setCellRenderer(dtcr);
+        table.getColumnModel().getColumn(2).setCellRenderer(dtcr);
+        table.getColumnModel().getColumn(3).setCellRenderer(dtcr);
+        table.getColumnModel().getColumn(4).setCellRenderer(dtcr);
+
         add(scrollPane);
         // Register the panel as a listener
         MessageEventBus.getInstance().registerListener(this);
@@ -59,7 +69,7 @@ public class TradeMessagePanel extends JPanel implements MessageListener {
         String message = String.format("%s\tPrice  %s\tChange  %s\tChange%s  %s\t\t%s %s", symbol, price, change, "%" ,changePercent, date, time);
 
         SwingUtilities.invokeLater(() -> {
-            model.addRow(new Object[] {symbol, price, change, changePercent, date + " " + time});
+            model.addRow(new Object[] {symbol, price, change, changePercent, time});
             scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
         });
     }

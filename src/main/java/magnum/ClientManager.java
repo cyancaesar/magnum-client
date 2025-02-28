@@ -49,6 +49,10 @@ public class ClientManager {
         clients.forEach((key, client) -> client.connect());
     }
 
+    public void stopClients() {
+        clients.forEach((key, client) -> client.close());
+    }
+
     public static ClientManager getInstance() {
         return INSTANCE;
     }

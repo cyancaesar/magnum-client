@@ -1,5 +1,6 @@
 package magnum.gui;
 
+import magnum.ClientManager;
 import magnum.eventbus.ClientConnectionEventBus;
 import magnum.ClientConnectionListener;
 import magnum.eventbus.MessageEventBus;
@@ -9,6 +10,8 @@ import magnum.PricingDataOuterClass;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,10 +20,12 @@ public class FooterPanel extends JPanel implements MessageListener, ClientConnec
     private long counter;
     private long clients;
     private long tickers;
+    private long volumes;
     private JLabel counterLabel;
     private JLabel tickersLabel;
-    private JLabel clockLabel;
     private JLabel clientsLabel;
+    private JButton connectButton;
+    private JButton disconnectButton;
 
     public FooterPanel () {
         setLayout(new BorderLayout());
@@ -30,21 +35,23 @@ public class FooterPanel extends JPanel implements MessageListener, ClientConnec
         tickers = 0L;
 
         counterLabel = new JLabel("Trades: " + counter);
-        clockLabel = new JLabel("");
         clientsLabel = new JLabel("Clients: " + clients);
         tickersLabel = new JLabel("Tickers: " + tickers);
-        clockLabel.putClientProperty("FlatLaf.styleClass", "h3.regular");
         counterLabel.putClientProperty("FlatLaf.styleClass", "h3.regular");
         clientsLabel.putClientProperty("FlatLaf.styleClass", "h3.regular");
         tickersLabel.putClientProperty("FlatLaf.styleClass", "h3.regular");
 
+        connectButton = new JButton("Connect");
 
-        DateFormat df = new SimpleDateFormat("HH:mm:ss");
-        new Timer(100, e -> {
-            Calendar cal = Calendar.getInstance();
-            String ti1 = df.format(cal.getTime());
-            clockLabel.setText(ti1);
-        }).start();
+        disconnectButton = new JButton("Disconnect");
+
+        connectButton.putClientProperty("FlatLaf.styleClass", "h3.regular");
+        disconnectButton.putClientProperty("FlatLaf.styleClass", "h3.regular");
+
+        JPanel eastPanel = new JPanel(new FlowLayout());
+
+        eastPanel.add(connectButton);
+        eastPanel.add(disconnectButton);
 
         JPanel westPanel = new JPanel(new FlowLayout());
         westPanel.add(clientsLabel);
@@ -54,12 +61,16 @@ public class FooterPanel extends JPanel implements MessageListener, ClientConnec
         westPanel.add(counterLabel);
 
         add(westPanel, BorderLayout.WEST);
-        add(clockLabel, BorderLayout.EAST);
+        add(eastPanel, BorderLayout.EAST);
 
         setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0,0,0,0), new EmptyBorder(10,10,10,10)));
+
         // Register the panel as a listener
         MessageEventBus.getInstance().registerListener(this);
         ClientConnectionEventBus.getInstance().registerListener(this);
+
+        connectButton.addActionListener(l -> ClientManager.getInstance().startClients());
+        disconnectButton.addActionListener(l -> ClientManager.getInstance().stopClients());
     }
 
     public void updateCounter() {
