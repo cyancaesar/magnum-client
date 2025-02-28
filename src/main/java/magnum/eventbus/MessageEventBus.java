@@ -1,16 +1,19 @@
-package magnum;
+package magnum.eventbus;
+
+import magnum.MessageListener;
+import magnum.PricingDataOuterClass;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class MessageEventBus {
-    private static MessageEventBus instance = new MessageEventBus();
-    private Set<MessageListener> listeners = new LinkedHashSet<>();
+    private static MessageEventBus INSTANCE = new MessageEventBus();
+    private final Set<MessageListener> listeners = new LinkedHashSet<>();
 
     private MessageEventBus() {}
 
     public static MessageEventBus getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -18,7 +21,7 @@ public class MessageEventBus {
      * @param listener
      */
     public void registerListener(MessageListener listener) {
-        this.listeners.add(listener);
+        listeners.add(listener);
         System.out.println("Registered " + listener.getClass().getName());
     }
 
@@ -27,7 +30,7 @@ public class MessageEventBus {
      * @param pricingData
      */
     public void emit(PricingDataOuterClass.PricingData pricingData) {
-        this.listeners.forEach(listener -> listener.onMessage(pricingData));
+        listeners.forEach(listener -> listener.onMessage(pricingData));
     }
 
 }

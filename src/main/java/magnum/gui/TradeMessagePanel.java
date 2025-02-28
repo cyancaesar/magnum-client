@@ -1,12 +1,11 @@
 package magnum.gui;
 
-import magnum.MessageEventBus;
+import magnum.eventbus.MessageEventBus;
 import magnum.MessageListener;
 import magnum.PricingDataOuterClass;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,25 +14,33 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class TradeMessagePanel extends JPanel implements MessageListener {
-    private JTextArea textArea;
+    private JTable table;
     private JScrollPane scrollPane;
+    private DefaultTableModel model;
 
     public TradeMessagePanel() {
         setLayout(new BorderLayout());
-        textArea = new JTextArea();
-        textArea.setFocusable(false);
-        textArea.putClientProperty("FlatLaf.styleClass", "h2.regular");
-        scrollPane = new JScrollPane(textArea);
-        scrollPane.setBorder(BorderFactory.createCompoundBorder(new EtchedBorder(),new EmptyBorder(10,10,10,10)));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        add(scrollPane);
 
+        String[] columnNames = new String[] {"Symbol", "Price", "Change", "Change %", "Time"};
+
+        model = new DefaultTableModel(columnNames, 0);
+        table = new JTable();
+        scrollPane = new JScrollPane(table);
+        table.setFocusable(false);
+        table.putClientProperty("FlatLaf.styleClass", "h3.regular");
+
+        table.setModel(model);
+        table.setFillsViewportHeight(true);
+        scrollPane.setAutoscrolls(true);
+
+        add(scrollPane);
         // Register the panel as a listener
         MessageEventBus.getInstance().registerListener(this);
     }
 
     @Override
     public void onMessage(PricingDataOuterClass.PricingData pricingData) {
+//        model.addRow(new Object[] {"1", "2", "3", "4", "5"});
         // Get the id (symbol), price, change,
         // change in percent and time.
         String symbol = pricingData.getId();
@@ -52,7 +59,8 @@ public class TradeMessagePanel extends JPanel implements MessageListener {
         String message = String.format("%s\tPrice  %s\tChange  %s\tChange%s  %s\t\t%s %s", symbol, price, change, "%" ,changePercent, date, time);
 
         SwingUtilities.invokeLater(() -> {
-            this.textArea.append("\n" + message);
+            model.addRow(new Object[] {symbol, price, change, changePercent, date + " " + time});
+            scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
         });
     }
 }

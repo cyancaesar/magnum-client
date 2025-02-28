@@ -1,6 +1,8 @@
 package magnum;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import magnum.eventbus.ClientConnectionEventBus;
+import magnum.eventbus.MessageEventBus;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -41,6 +43,7 @@ public class Client extends WebSocketClient {
 
         message.put("subscribe", tickers);
         send(message.toString());
+        ClientConnectionEventBus.getInstance().emit(numOfTickers());
     }
 
     @Override

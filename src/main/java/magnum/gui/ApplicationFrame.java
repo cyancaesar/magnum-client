@@ -27,7 +27,7 @@ public class ApplicationFrame extends JFrame {
         setVisible(true);
     }
 
-    public static synchronized ApplicationFrame getINSTANCE() {
+    public static synchronized ApplicationFrame getinstance() {
         if (Objects.isNull(INSTANCE)) {
             INSTANCE = new ApplicationFrame();
         }
