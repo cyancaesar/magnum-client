@@ -1,7 +1,8 @@
-package magnum.gui;
+package magnum.gui.component;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
 
 public class HeaderPanel extends JPanel {
 

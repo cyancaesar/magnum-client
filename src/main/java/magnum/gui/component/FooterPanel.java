@@ -1,4 +1,4 @@
-package magnum.gui;
+package magnum.gui.component;
 
 import magnum.ClientManager;
 import magnum.eventbus.ClientConnectionEventBus;
@@ -7,14 +7,16 @@ import magnum.eventbus.MessageEventBus;
 import magnum.MessageListener;
 import magnum.PricingDataOuterClass;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 public class FooterPanel extends JPanel implements MessageListener, ClientConnectionListener {
     private long counter;

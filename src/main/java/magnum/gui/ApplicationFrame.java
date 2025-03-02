@@ -1,7 +1,12 @@
 package magnum.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import magnum.gui.component.ContentPane;
+import magnum.gui.component.FooterPanel;
+import magnum.gui.component.HeaderPanel;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+import java.awt.BorderLayout;
 import java.util.Objects;
 
 public class ApplicationFrame extends JFrame {
@@ -13,18 +18,18 @@ public class ApplicationFrame extends JFrame {
         setTitle("Magnum");
         setSize(1200, 900);
         setLayout(new BorderLayout());
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         HeaderPanel headerPanel = new HeaderPanel();
-        TradeMessagePanel bodyPanel = new TradeMessagePanel();
+        ContentPane contentPane = new ContentPane();
         FooterPanel footerPanel = new FooterPanel();
 
         add(headerPanel, BorderLayout.NORTH);
-        add(bodyPanel, BorderLayout.CENTER);
+        add(contentPane, BorderLayout.CENTER);
         add(footerPanel, BorderLayout.SOUTH);
 
         setFocusable(true);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
